@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prometheus 监控k8s的一些重要指标 | mutoulazy's space</title><meta name="keywords" content="kubernetes,prometheus"><meta name="author" content="mutoulazy"><meta name="copyright" content="mutoulazy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="重要指标12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091监控指标cadvice:    计算容器cpu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus 监控k8s的一些重要指标">
+<meta property="og:url" content="https://mutoulazy.github.io/2018/12/05/kubernetes/prometheus/prometheus-k8s-metrics/index.html">
+<meta property="og:site_name" content="mutoulazy&#39;s space">
+<meta property="og:description" content="重要指标12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091监控指标cadvice:    计算容器cpu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png">
+<meta property="article:published_time" content="2018-12-05T06:44:36.000Z">
+<meta property="article:modified_time" content="2021-07-28T09:58:05.000Z">
+<meta property="article:author" content="mutoulazy">
+<meta property="article:tag" content="kubernetes">
+<meta property="article:tag" content="prometheus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mutoulazy.github.io/2018/12/05/kubernetes/prometheus/prometheus-k8s-metrics/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: mutoulazy","link":"链接: ","source":"来源: mutoulazy's space","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Prometheus 监控k8s的一些重要指标',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-28 17:58:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/k8s.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">mutoulazy's space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Prometheus 监控k8s的一些重要指标</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2018-12-05T06:44:36.000Z" title="发表于 2018-12-05 14:44:36">2018-12-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-28T09:58:05.000Z" title="更新于 2021-07-28 17:58:05">2021-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kubernetes/">kubernetes</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kubernetes/prometheus/">prometheus</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Prometheus 监控k8s的一些重要指标"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="重要指标"><a href="#重要指标" class="headerlink" title="重要指标"></a>重要指标</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">监控指标</span><br><span class="line">cadvice:</span><br><span class="line">    计算容器cpu的使用率：</span><br><span class="line">    sum(irate(container_cpu_usage_seconds_total&#123;image!=&quot;&quot;&#125;[1m])) without (cpu)</span><br><span class="line">    容器内存使用量（单位：字节）</span><br><span class="line">    container_memory_usage_bytes&#123;image!=&quot;&quot;&#125;</span><br><span class="line">    查询容器网络接收量速率（单位：字节/秒）</span><br><span class="line">    sum(rate(container_network_receive_bytes_total&#123;image!=&quot;&quot;&#125;[1m])) without (interface)</span><br><span class="line">    查询容器网络传输量速率（单位：字节/秒）：</span><br><span class="line">    sum(rate(container_network_transmit_bytes_total&#123;image!=&quot;&quot;&#125;[1m])) without (interface)</span><br><span class="line">    查询容器文件系统读取速率（单位：字节/秒）：</span><br><span class="line">    sum(rate(container_fs_reads_bytes_total&#123;image!=&quot;&quot;&#125;[1m])) without (device)</span><br><span class="line">    查询容器文件系统写入速率（单位：字节/秒）：</span><br><span class="line">    sum(rate(container_fs_writes_bytes_total&#123;image!=&quot;&quot;&#125;[1m])) without (device)</span><br><span class="line"></span><br><span class="line">MySQLD Exporter：</span><br><span class="line">    查询吞吐量（速率）</span><br><span class="line">    sum(rate(mysql_global_status_commands_total&#123;command=~&quot;insert|update|delete&quot;&#125;[2m])) without (command)</span><br><span class="line">    连接情况</span><br><span class="line">    当前剩余的可用连接数</span><br><span class="line">    mysql_global_variables_max_connections - mysql_global_status_threads_connected</span><br><span class="line">    前MySQL实例连接拒绝数</span><br><span class="line">    mysql_global_status_aborted_connects</span><br><span class="line">    缓冲池使用情况</span><br><span class="line">    MySQL实例的缓冲池利用率</span><br><span class="line">    (sum(mysql_global_status_buffer_pool_pages) by (instance) - sum(mysql_global_status_buffer_pool_pages&#123;state=&quot;free&quot;&#125;) by (instance)) / sum(mysql_global_status_buffer_pool_pages) by (instance)</span><br><span class="line">    2分钟内磁盘读取请求次数的增长率的变化情况</span><br><span class="line">    rate(mysql_global_status_innodb_buffer_pool_reads[2m])</span><br><span class="line">    查询执行性能</span><br><span class="line">    Slow_queries的增长情况</span><br><span class="line">    rate(mysql_global_status_slow_queries[2m])</span><br><span class="line">    </span><br><span class="line">kube</span><br><span class="line">    NodeCPU使用率：</span><br><span class="line">    sum(irate(node_cpu_seconds_total&#123;nodename=&quot;10.10.173.203&quot;,mode!=&quot;idle&quot;&#125;[1m]))*100</span><br><span class="line">    </span><br><span class="line">    Node CPU负载:</span><br><span class="line">    node_load1</span><br><span class="line">    node_load5</span><br><span class="line">    node_load15</span><br><span class="line"></span><br><span class="line">    Node内存使用率：</span><br><span class="line">    (1-node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes)*100</span><br><span class="line"></span><br><span class="line">    根分区剩余空间：</span><br><span class="line">    node_filesystem_avail_bytes&#123;device=&quot;rootfs&quot;&#125;</span><br><span class="line"></span><br><span class="line">    Node CPU数量:</span><br><span class="line">    machine_cpu_cores</span><br><span class="line"></span><br><span class="line">    容器CPU使用率：</span><br><span class="line">    (sum(irate(container_cpu_usage_seconds_total&#123;container_name!=&quot;&quot;,pod_name!=&quot;&quot;,namespace=&quot;test-godeyes&quot;&#125;[1m])) by(cluster,namespace,container_name,pod_name))/(sum(container_spec_cpu_quota&#123;namespace=&quot;test-godeyes&quot;,container_name!=&quot;&quot;,pod_name!=&quot;&quot;&#125;) by(cluster,namespace,container_name,pod_name) /100000)*100</span><br><span class="line">    </span><br><span class="line">    容器内存使用率:</span><br><span class="line">    container_memory_rss&#123;namespace=&quot;test-godeyes&quot;,container_name!=&quot;&quot;,pod_name!=&quot;&quot;&#125;/(container_spec_memory_limit_bytes&#123;namespace=&quot;test-godeyes&quot;, container_name!=&quot;&quot;,pod_name!=&quot;&quot;&#125;) &lt;=1</span><br><span class="line"></span><br><span class="line">    容器inode使用总数：</span><br><span class="line">    container_fs_inodes_total&#123;namespace=&quot;test-godeyes&quot;,container_name!=&quot;&quot;,pod_name!=&quot;&quot;&#125;</span><br><span class="line"></span><br><span class="line">    mysql连接数:</span><br><span class="line">    mysql_global_status_connections&#123;vip=&quot;10.19.124.36:3306&quot;&#125;</span><br><span class="line"></span><br><span class="line">    mysql状态：</span><br><span class="line">    MySQL_Up&#123;vip=&quot;10.19.124.36:3306&quot;&#125;</span><br><span class="line"></span><br><span class="line">    mysql ops:</span><br><span class="line">    delta(mysql_global_status_innodb_row_ops_total&#123;vip=&quot;10.19.185.107:3306&quot;&#125;[5m])</span><br><span class="line">    </span><br><span class="line">    mysql hit命中率:</span><br><span class="line">    (mysql_global_status_qcache_hits-mysql_global_status_qcache_inserts )/mysql_global_status_qcache_hits * 100</span><br><span class="line"></span><br><span class="line">    redis状态：</span><br><span class="line">    redis_cluster_state&#123;addr=&quot;10.19.100.8:7000&quot;&#125;</span><br><span class="line"></span><br><span class="line">    redis连接数：</span><br><span class="line">    redis_connected_clients&#123;addr=&quot;10.19.100.8:7000&quot;&#125;</span><br><span class="line"></span><br><span class="line">    redis命中率:</span><br><span class="line">    redis_keyspace_hits_total&#123;addr=&quot;10.19.100.8:7000&quot;&#125;/(redis_keyspace_misses_total&#123;addr=&quot;10.19.100.8:7000&quot;&#125;+redis_keyspace_hits_total&#123;addr=&quot;10.19.100.8:7000&quot;&#125;)</span><br><span class="line"></span><br><span class="line">    redis内存使用率：</span><br><span class="line">    redis_memory_used_bytes&#123;addr=&quot;10.19.100.8:7000&quot;&#125;/redis_memory_max_bytes&#123;addr=&quot;10.19.100.8:7000&quot;&#125;</span><br><span class="line"></span><br><span class="line">    mq状态：</span><br><span class="line">    rabbitmq_up</span><br><span class="line"></span><br><span class="line">    mq积压：</span><br><span class="line">    rabbitmq_queue_messages_ready</span><br><span class="line"></span><br><span class="line">    mq内存：</span><br><span class="line">    rabbitmq_node_mem_used/rabbitmq_node_mem_limit</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">mutoulazy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mutoulazy.github.io/2018/12/05/kubernetes/prometheus/prometheus-k8s-metrics/">https://mutoulazy.github.io/2018/12/05/kubernetes/prometheus/prometheus-k8s-metrics/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mutoulazy.github.io" target="_blank">mutoulazy's space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/kubernetes/">kubernetes</a><a class="post-meta__tags" href="/tags/prometheus/">prometheus</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/02/14/Java/java-thread/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">多线程导图</div></div></a></div><div class="next-post pull-right"><a href="/2018/10/31/cloud-native/cloud-framework/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">云架构导图</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2019/11/18/kubernetes/ceph/prometheus迁移存储为ceph/" title="prometheus迁移存储为ceph"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-18</div><div class="title">prometheus迁移存储为ceph</div></div></a></div><div><a href="/2019/07/31/kubernetes/prometheus/prometheus-alert-record/" title="prometheus 中的 alert record"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-07-31</div><div class="title">prometheus 中的 alert record</div></div></a></div><div><a href="/2019/06/28/kubernetes/prometheus/prometheus-drop-metrics/" title="prometheus中如何过滤不需要的指标"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-06-28</div><div class="title">prometheus中如何过滤不需要的指标</div></div></a></div><div><a href="/2019/06/28/kubernetes/prometheus/prometheus-nodeExport-error/" title="解决在prometheus-opretor中部署的node-export采集主机根目录数据不正常的问题"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-06-28</div><div class="title">解决在prometheus-opretor中部署的node-export采集主机根目录数据不正常的问题</div></div></a></div><div><a href="/2019/06/04/kubernetes/prometheus/prometheus-operator-additional-scrape-configs/" title="Prometheus-operator 添加自定义采集规则的方法"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-06-04</div><div class="title">Prometheus-operator 添加自定义采集规则的方法</div></div></a></div><div><a href="/2019/06/04/kubernetes/prometheus/prometheus-operator-kubelet-error/" title="Prometheus-operator获取kubelet指标失败的解决方法"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-06-04</div><div class="title">Prometheus-operator获取kubelet指标失败的解决方法</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/k8s.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">mutoulazy</div><div class="author-info__description">往者不谏，来者可追</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mutoulazy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mutoulazy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mutoulazy@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%8C%87%E6%A0%87"><span class="toc-text">重要指标</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitea与drone CICD"/></a><div class="content"><a class="title" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">gitea与drone CICD</a><time datetime="2021-04-30T03:00:00.000Z" title="发表于 2021-04-30 11:00:00">2021-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="filebeat采集集群应用日志"/></a><div class="content"><a class="title" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">filebeat采集集群应用日志</a><time datetime="2021-04-26T03:00:00.000Z" title="发表于 2021-04-26 11:00:00">2021-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="openLDAP服务搭建与使用"/></a><div class="content"><a class="title" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">openLDAP服务搭建与使用</a><time datetime="2021-04-01T05:24:00.000Z" title="发表于 2021-04-01 13:24:00">2021-04-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By mutoulazy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://mutoulazy.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

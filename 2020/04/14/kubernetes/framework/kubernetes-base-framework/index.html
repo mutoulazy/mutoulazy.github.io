@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kubernetes 基础架构 | mutoulazy's space</title><meta name="keywords" content="kubernetes,framework"><meta name="author" content="mutoulazy"><meta name="copyright" content="mutoulazy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Kubernetes 基础架构 Master &amp; NodeMastermaster为集群的控制节点，master 负责集群中的全局决策（例如，调度），master 探测并响应集群事件（例如，当 Deployment 的实际 Pod 副本数未达到 replicas 字段的规定时，启动一个新的 Pod）master节点通常包含：kube-apiserver、Etcd、Controller Ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes 基础架构">
+<meta property="og:url" content="https://mutoulazy.github.io/2020/04/14/kubernetes/framework/kubernetes-base-framework/index.html">
+<meta property="og:site_name" content="mutoulazy&#39;s space">
+<meta property="og:description" content="Kubernetes 基础架构 Master &amp; NodeMastermaster为集群的控制节点，master 负责集群中的全局决策（例如，调度），master 探测并响应集群事件（例如，当 Deployment 的实际 Pod 副本数未达到 replicas 字段的规定时，启动一个新的 Pod）master节点通常包含：kube-apiserver、Etcd、Controller Ma">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png">
+<meta property="article:published_time" content="2020-04-14T03:15:00.000Z">
+<meta property="article:modified_time" content="2021-07-28T09:58:05.000Z">
+<meta property="article:author" content="mutoulazy">
+<meta property="article:tag" content="kubernetes">
+<meta property="article:tag" content="framework">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mutoulazy.github.io/2020/04/14/kubernetes/framework/kubernetes-base-framework/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: mutoulazy","link":"链接: ","source":"来源: mutoulazy's space","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kubernetes 基础架构',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-28 17:58:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/k8s.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">mutoulazy's space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Kubernetes 基础架构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-14T03:15:00.000Z" title="发表于 2020-04-14 11:15:00">2020-04-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-28T09:58:05.000Z" title="更新于 2021-07-28 17:58:05">2021-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kubernetes/">kubernetes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Kubernetes 基础架构"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Kubernetes-基础架构"><a href="#Kubernetes-基础架构" class="headerlink" title="Kubernetes 基础架构"></a>Kubernetes 基础架构</h1><p><img src="http://mutoulazy-public.oss-cn-shenzhen.aliyuncs.com/blog/20200415/211555551.png" alt="mark"></p>
+<h2 id="Master-amp-Node"><a href="#Master-amp-Node" class="headerlink" title="Master &amp; Node"></a>Master &amp; Node</h2><h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><p>master为集群的控制节点，master 负责集群中的全局决策（例如，调度），master 探测并响应集群事件（例如，当 Deployment 的实际 Pod 副本数未达到 replicas 字段的规定时，启动一个新的 Pod）<br>master节点通常包含：kube-apiserver、Etcd、Controller Manager、Scheduler组件</p>
+<h4 id="kube-apiserver"><a href="#kube-apiserver" class="headerlink" title="kube-apiserver"></a><a href="https://mutoulazy.github.io/2020/01/02/kubernetes/Kubernetes%20API%20Server%E8%A7%A3%E6%9E%90/">kube-apiserver</a></h4><p>Kubernetes API Server的核心功能是提供Kubernetes各类资源对象（如Pod、 RC、 Service等） 的增、 删、 改、 查及Watch等HTTP Rest接口， 成为集群内各个功能模块之间数据交互和通信的中心枢纽，是整个系统的数据总线和数据中心。 除此之外它还是：集群管理的API入口 、资源配额控制的入口 、为集群提供了完备的集群安全机制。</p>
+<p>在默认情况下， kube-apiserver进程在本机的8080端口（对应参数–insecure-port） 提供REST服务。 我们可以同时启动HTTPS安全端口（–secure-port=6443） 来启动安全机制， 加强REST API访问的安全性。 通常可以通过命令行工具kubectl来与Kubernetes API Server交互， 它们之间的接口是RESTful API。 </p>
+<p>Kubernetes API Server 创建Pod过程借助自身的List-Watch机制：<br><img src="http://mutoulazy-public.oss-cn-shenzhen.aliyuncs.com/images/List-Watch%E6%9C%BA%E5%88%B6.jpg" alt="img"></p>
+<h4 id="etcd"><a href="#etcd" class="headerlink" title="etcd"></a><a target="_blank" rel="noopener" href="https://gitchat.csdn.net/columnTopic/5dba7d97c39a5f13a688abb1">etcd</a></h4><p>etcd 是一个分布式的、可靠的 key-value 存储系统，它用于存储分布式系统中的关键数据</p>
+<p>一个 etcd 集群，通常会由 3 个或者 5 个节点组成，多个节点之间，通过一个叫做 Raft 一致性算法的方式完成分布式一致性协同，算法会选举出一个主节点作为 leader，由 leader 负责数据的同步与数据的分发，当 leader 出现故障后，系统会自动地选取另一个节点成为 leader，并重新完成数据的同步与分发。客户端在众多的 leader 中，仅需要选择其中的一个就可以完成数据的读写。</p>
+<p>在 etcd 整个的架构中，有一个非常关键的概念叫做 quorum，quorum 的定义是 =（n+1）/2，也就是说超过集群中半数节点组成的一个团体，在 3 个节点的集群中，etcd 可以容许 1 个节点故障，也就是只要有任何 2 个节点重合，etcd 就可以继续提供服务。同理，在 5 个节点的集群中，只要有任何 3 个节点重合，etcd 就可以继续提供服务。这也是 etcd 集群高可用的关键。</p>
+<p>我们可以通过 etcd 提供的客户端去访问集群的数据，也可以直接通过 http 的方式，类似像 curl 命令直接访问 etcd。在 etcd 内部，其数据表示也是比较简单的，我们可以直接把 etcd 的数据存储理解为一个有序的 map，它存储着 key-value 数据。同时 etcd 为了方便客户端去订阅资料的数据，也支持了一个 watch 机制，我们可以通过 watch 实时地拿到 etcd 中数据的增量更新，从而保持与 etcd 中的数据同步。</p>
+<p>etcd 的数据版本号机制:</p>
+<ul>
+<li> etcd 中有个 term 的概念，代表的是整个集群 Leader 的标志。当集群发生 Leader 切换，比如说 Leader 节点故障，或者说 Leader 节点网络出现问题，再或者是将整个集群停止后再次拉起，这个时候都会发生 Leader 的切换。当 Leader 切换的时候，term 的值就会 +1</li>
+<li> revision 代表的是全局数据的版本。当数据发生变更，包括创建、修改、删除，revision 对应的都会 +1。在任期内，revision 都可以保持全局单调递增的更改。正是 revision 的存在才使得 etcd 既可以支持数据的 MVCC，也可以支持数据的 Watch</li>
+<li> 对于每一个 KeyValue 数据，etcd 中都记录了三个版本：</li>
+<li> 第一个版本叫做 create_revision，是 KeyValue 在创建的时候生成的版本号；</li>
+<li> 第二个叫做 mod_revision，是其数据被操作的时候对应的版本号；</li>
+<li> 第三个 version 就是一个计数器，代表了 KeyValue 被修改了多少次。</li>
+</ul>
+<p>在 watch 的时候指定数据的版本，创建一个 watcher，并通过这个 watcher 提供的一个数据管道，能够获取到指定的 revision 之后所有的数据变更。如果指定的 revision 是一个旧版本，可以立即拿到从旧版本到当前版本所有的数据更新。并且，watch 的机制会保证 etcd 中，该 Key 的数据发生后续的修改后，依然可以从这个数据管道中拿到数据增量的更新。</p>
+<p>在 etcd 中会周期性的运行一个 Compaction 的机制来清理历史数据。对于一个 Key 的历史版本数据，可以选择清理掉。</p>
+<p>lease 是分布式系统中一个常见的概念，用于代表一个租约。通常情况下，在分布式系统中需要去检测一个节点是否存活的时候，就需要租约机制。当租约过期时，etcd 就会自动清理掉对应的数据。也可以使用调用 KeepAlive 的方法，与 etcd 保持一个租约不断的续约</p>
+<h5 id="Etcd写数据流程"><a href="#Etcd写数据流程" class="headerlink" title="Etcd写数据流程"></a>Etcd写数据流程</h5><ol>
+<li>etcd 任一节点的 etcd server 模块收到 Client 写请求（如果是 follower 节点，会先通过 Raft 模块将请求转发至 leader 节点处理）。</li>
+<li>etcd server 将请求封装为 Raft 请求，然后提交给 Raft 模块处理。<br>leader 通过 Raft 协议与集群中 follower 节点进行交互，将消息复制到follower 节点，于此同时，并行将日志持久化到 WAL。</li>
+<li>follower 节点对该请求进行响应，回复自己是否同意该请求。</li>
+<li>当集群中超过半数节点（(n/2)+1 members ）同意接收这条日志数据时，表示该请求可以被Commit，Raft 模块通知 etcd server 该日志数据已经 Commit，可以进行 Apply。</li>
+<li>各个节点的 etcd server 的 applierV3 模块异步进行 Apply 操作，并通过 MVCC 模块写入后端存储 BoltDB。</li>
+<li>当 client 所连接的节点数据 apply 成功后，会返回给客户端 apply 的结果。</li>
+</ol>
+<h5 id="Etcd读数据流程"><a href="#Etcd读数据流程" class="headerlink" title="Etcd读数据流程"></a>Etcd读数据流程</h5><ol>
+<li>etcd 任一节点的 etcd server 模块收到客户端读请求（Range 请求）</li>
+<li>判断读请求类型，如果是串行化读（serializable）则直接进入 Apply 流程</li>
+<li>如果是线性一致性读（linearizable），则进入 Raft 模块</li>
+<li>Raft 模块向 leader 发出 ReadIndex 请求，获取当前集群已经提交的最新数据 Index</li>
+<li>等待本地 AppliedIndex 大于或等于 ReadIndex 获取的 CommittedIndex 时，进入 Apply 流程</li>
+<li>Apply 流程：通过 Key 名从 KV Index 模块获取 Key 最新的 Revision，再通过 Revision 从 BoltDB 获取对应的 Key 和 Value。</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/dpTpwXjMtdT8Rq6nKMOHbw">来源</a></p>
+<h4 id="Controller-Manager"><a href="#Controller-Manager" class="headerlink" title="Controller Manager"></a><a target="_blank" rel="noopener" href="https://blog.ihypo.net/15763910382218.html">Controller Manager</a></h4><p>Controller Manager是Kubernetes中各种操作系统的管理者， 是集群内部的管理控制中心， 也是Kubernetes自动化功能的核心 </p>
+<p>Controller Manager内部包含Replication Controller、Node Controller、 ResourceQuota Controller、Namespace Controller、ServiceAccount Controller、 Token Controller、 Service Controller及Endpoint Controller这8种Controller， 每种Controller都负责一种特定资源的控制流程， 而Controller Manager正是这些Controller的核心管理者。 Controller 保证集群内的资源保持预期状态，而 Controller Manager 保证了 Controller 保持在预期状态。</p>
+<p>Controller Manager的工作流程：<br><img src="https://blog.cdn.updev.cn/2019-12-15-clientgo.jpg"><br>从比较高维度的视角看，Controller Manager 主要提供了一个分发事件的能力，而不同的 Controller 只需要注册对应的 Handler 来等待接收和处理事件。</p>
+<p>Controller Manager的架构：<br>Controller 是下半部分（CustomController）描述的内容，而 Controller Manager 主要完成的是上半部分<br><img src="https://blog.cdn.updev.cn/2019-12-15-071923.jpg" alt="img"></p>
+<ol>
+<li>Informer 在初始化时，Reflector 会先 List API 获得所有的 Pod</li>
+<li>Reflect 拿到全部 Pod 后，会将全部 Pod 放到 Store 中</li>
+<li>如果有人调用 Lister 的 List/Get 方法获取 Pod， 那么 Lister 会直接从 Store 中拿数据</li>
+<li>Informer 初始化完成之后，Reflector 开始 Watch Pod，监听 Pod 相关 的所有事件;如果此时 pod_1 被删除，那么 Reflector 会监听到这个事件</li>
+<li>Reflector 将 pod_1 被删除 的这个事件发送到 DeltaFIFO</li>
+<li>DeltaFIFO 首先会将这个事件存储在自己的数据结构中(实际上是一个 queue)，然后会直接操作 Store 中的数据，删除 Store 中的 pod_1</li>
+<li>DeltaFIFO 再 Pop 这个事件到 Controller 中</li>
+<li>Controller 收到这个事件，会触发 Processor 的回调函数</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43116910/article/details/88653263">List-Watch 机制</a></li>
+</ul>
+<p>Etcd存储集群的数据信息，apiserver作为统一入口，任何对数据的操作都必须经过 apiserver。客户端(kubelet/scheduler/controller-manager)通过 list-watch 监听 apiserver 中资源(pod/rs/rc等等)的 create, update 和 delete 事件，并针对事件类型调用相应的事件处理函数。</p>
+<p>那么list-watch 具体是什么呢，顾名思义，list-watch有两部分组成，分别是list和 watch。list 非常好理解，就是调用资源的list API罗列资源，基于HTTP短链接实现；watch则是调用资源的watch API监听资源变更事件，基于HTTP 长链接实现。</p>
+<p>Informer是 Client-go中的一个核心工具包。K8S 的informer 模块封装 list-watch API，用户只需要指定资源，编写事件处理函数，AddFunc, UpdateFunc和 DeleteFunc等。如下图所示，informer首先通过list API 罗列资源，然后调用 watch API监听资源的变更事件，并将结果放入到一个 FIFO 队列，队列的另一头有协程从中取出事件，并调用对应的注册函数处理事件。Informer还维护了一个只读的Map Store 缓存，主要为了提升查询的效率，降低apiserver 的负载。</p>
+<h4 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a><a target="_blank" rel="noopener" href="https://gitchat.csdn.net/columnTopic/5dba89d636f9741cf5c4dac5">Scheduler</a></h4><p>Kubernetes Scheduler的作用是将待调度的Pod（API新创建的Pod、Controller Manager为补足副本而创建Pod等）按照特定的调度算法和调度策略绑定（Binding）到集群中某个合适的Node上，并将绑定信息写入etcd中。在整个调度过程中涉及三个对象，分别是待调度Pod列表、可用Node列表，以及调度算法和策略。简单地说，就是通过调度算法调度为待调度Pod列表中的每个Pod从Node列表中选择一个最适合的Node。<br>Kubernetes Scheduler当前提供的默认调度流程分为以下两步：</p>
+<ul>
+<li>预选调度过程，即遍历所有目标Node，筛选出符合要求的候选节点。为此，Kubernetes内置了多种预选策略（xxx Predicates）供用户选择。</li>
+<li>确定最优节点，在第1步的基础上，采用优选策略（xxxPriority）计算出每个候选节点的积分，积分最高者胜出。</li>
+</ul>
+<p><img src="https://images.gitbook.cn/FkGunJ5vdJihPz9WS4D5uCLUEpmD" alt="avatar"></p>
+<ol>
+<li>调度器启动时会通过配置文件 File，或者是命令行参数，或者是配置好的 ConfigMap，来指定调度策略</li>
+<li>启动的时候会通过 kube-apiserver 去 watch 相关的数据，通过 Informer 机制将调度需要的数据</li>
+<li>通过 Informer 去 watch 到需要等待的 Pod 数据，放到队列里面，通过调度算法流程里面，会一直循环从队列里面拿数据，然后经过调度流水线（调度器的调度流程 –》Wait 流程 –》Bind 流程）</li>
+<li>调度完成后，会去更新调度缓存 (Schedule Cache)，如更新 Pod 数据的缓存，也会更新 Node 数据</li>
+</ol>
+<p>具体可见<a href="https://mutoulazy.github.io/2020/03/24/kubernetes/Kubernetes%20%E8%B0%83%E5%BA%A6%E5%99%A8%E6%B5%81%E7%A8%8B/">图</a></p>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>Node是Kubernetes中的工作节点，最开始被称为minion。一个Node可以是VM或物理机。每个Node（节点）具有运行pod的一些必要服务，并由Master组件进行管理，Node节点上的服务包括Docker、kubelet和kube-proxy。</p>
+<h4 id="Kubelet"><a href="#Kubelet" class="headerlink" title="Kubelet"></a><a href="https://mutoulazy.github.io/2020/02/03/kubernetes/Kubernetes%20%20Kubelet%E8%A7%A3%E6%9E%90/">Kubelet</a></h4><p>在Kubernetes集群中，在每个Node（又称Minion）上都会启动一个kubelet服务进程。该进程用于处理Master下发到本节点的任务，管理Pod及Pod中的容器。每个kubelet进程都会在API Server上注册节点自身的信息，定期向Master汇报节点资源的使用情况，并通过cAdvisor监控容器和节点资源。</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1444694">kubelet详细架构解析</a><br>Kubelet组件运行在Node节点上，维持运行中的Pods以及提供kuberntes运行时环境，主要完成以下使命</p>
+<ol>
+<li>监视分配给该Node节点的pods </li>
+<li>挂载pod所需要的volumes </li>
+<li>下载pod的secret </li>
+<li>通过docker/rkt来运行pod中的容器 </li>
+<li>周期的执行pod中为容器定义的liveness探针 </li>
+<li>上报pod的状态给系统的其他组件 </li>
+<li>上报Node的状态 </li>
+</ol>
+<h5 id="LivenessProbe探针"><a href="#LivenessProbe探针" class="headerlink" title="LivenessProbe探针"></a>LivenessProbe探针</h5><p>LivenessProbe探针，用于判断容器是否健康并反馈给kubelet。如果LivenessProbe探针探测到容器不健康，则kubelet将删除该容器，并根据容器的重启策略做相应的处理。如果一个容器不包含LivenessProbe探针，那么kubelet认为该容器的LivenessProbe探针返回的值永远是Success.<br>kubelet定期调用容器中的LivenessProbe探针来诊断容器的健康状况。LivenessProbe包含以下3种实现方式</p>
+<ul>
+<li>ExecAction：在容器内部执行一个命令，如果该命令的退出状态码为0，则表明容器健康。</li>
+<li>TCPSocketAction：通过容器的IP地址和端口号执行TCP检查，如果端口能被访问，则表明容器健康。</li>
+<li>HTTPGetAction：通过容器的IP地址和端口号及路径调用HTTP Get方法，如果响应的状态码大于等于200且小于等于400，则认为容器状态健康。</li>
+</ul>
+<h5 id="ReadinessProbe探针"><a href="#ReadinessProbe探针" class="headerlink" title="ReadinessProbe探针"></a>ReadinessProbe探针</h5><p>ReadinessProbe探针，用于判断容器是否启动完成，且准备接收请求。如果ReadinessProbe探针检测到容器启动失败，则Pod的状态将被修改，Endpoint Controller将从Service的Endpoint中删除包含该容器所在Pod的IP地址的Endpoint条目.</p>
+<h5 id="kubelet命令技巧"><a href="#kubelet命令技巧" class="headerlink" title="kubelet命令技巧"></a>kubelet命令技巧</h5><p>获取所有未运行的 Pod(即状态不为 Running 的)：<br>kubectl get pods -A –field-selector=status.phase!=Running | grep -v Complete<br>获取节点列表及其内存大小:<br>kubectl get no -o json | jq -r ‘.items | sort_by(.status.capacity.memory)[] | [.metadata.name,.status.capacity.memory] | @tsv’<br>获取节点列表和在其上运行的容器的数量:<br>kubectl get po -o json –all-namespaces | jq ‘.items | group_by(.spec.nodeName) | map({“nodeName”: .[0].spec.nodeName, “count”: length}) | sort_by(.count)’<br>用 kubectl top 获取消耗CPU的Pod列表：<br>kubectl top pods -A | sort –reverse –key 3 –numeric<br>用 kubectl top 获取消耗内存资源的Pod列表：<br>kubectl top pods -A | sort –reverse –key 4 –numeric<br>将 secret 从一个命名空间复制到另一命名空间空间:<br>kubectl get secrets harbor -o json –namespace demo | jq ‘.metadata.namespace = “default”‘ | kubectl create -f  -</p>
+<h4 id="Kube-proxy"><a href="#Kube-proxy" class="headerlink" title="Kube-proxy"></a><a href="https://mutoulazy.github.io/2020/02/03/kubernetes/Kubernetes%20Kube-proxy%E8%A7%A3%E6%9E%90/">Kube-proxy</a></h4><p>在Kubernetes集群的每个Node上都会运行一个kube-proxy服务进程，我们可以把这个进程看作Service的透明代理兼负载均衡器，其核心功能是将到某个Service的访问请求转发到后端的多个Pod实例上。此外，Service的Cluster IP与NodePort等概念是kube-proxy服务通过iptables的NAT转换实现的，kube-proxy在运行过程中动态创建与Service相关的iptables规则，这些规则实现了将访问服务（Cluster IP或NodePort）的请求负载分发到后端Pod的功能。先后经过三代变更，目前采用的是IPVS。<br><img src="https://mutoulazy-public.oss-cn-shenzhen.aliyuncs.com/images/proxy%E7%AC%AC%E4%B8%89%E7%89%88.jpg" alt="img"><br>通过API Server的Watch接口实时跟踪Service与Endpoint的变更信息， 并更新对应的iptables规则， Client的请求流量则通过iptables的NAT机制“直接路由”到目标Pod。<br>与iptables相比， IPVS拥有以下明显优势： </p>
+<ul>
+<li>为大型集群提供了更好的可扩展性和性能 </li>
+<li>支持比iptables更复杂的复制均衡算法（ 最小负载、 最少连接、加权等） </li>
+<li>支持服务器健康检查和连接重试等功能</li>
+<li>可以动态修改ipset的集合， 即使iptables的规则正在使用这个集合<br>由于IPVS无法提供包过滤、 airpin-masquerade tricks（地址伪装） 、SNAT等功能， 因此在某些场景（如NodePort的实现） 下还要与iptables搭配使用。</li>
+</ul>
+<h5 id="主要的iptables规则"><a href="#主要的iptables规则" class="headerlink" title="主要的iptables规则"></a>主要的iptables规则</h5><ul>
+<li>KUBE-CLUSTER-IP： 在masquerade-all=true或clusterCIDR指定的情况下对Service Cluster IP地址进行伪装， 以解决数据包欺骗问题 。</li>
+<li>KUBE-EXTERNAL-IP： 将数据包伪装成Service的外部IP地址。 </li>
+<li>KUBE-LOAD-BALANCER、 KUBE-LOAD-BALANCERLOCAL： 伪装Load Balancer 类型的Service流量。 </li>
+<li>KUBE-NODE-PORT-TCP、 KUBE-NODE-PORT-LOCALTCP、 KUBE-NODE-PORTUDP、 KUBE-NODE-PORT-LOCAL-UDP：伪装NodePort类型的Service流量。 </li>
+</ul>
+<h4 id="Container-Runtime"><a href="#Container-Runtime" class="headerlink" title="Container Runtime"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/M2l0ZgSsVc7r69eFdTj/article/details/90248749">Container Runtime</a></h4><p>容器运行时接口（Container Runtime Interface） CRI，定义了一组 gRPC 接口：</p>
+<ul>
+<li>一套针对容器操作的接口，包括创建，启停容器等等</li>
+<li>一套针对镜像操作的接口，包括拉取镜像删除镜像等；</li>
+<li>还有一套针对 PodSandbox（容器沙箱环境）的操作接口</li>
+</ul>
+<p>开放容器标准 （Open Container Initiative） OCI 定义了（runc是参考实现）：</p>
+<ul>
+<li>容器镜像要长啥样，即 ImageSpec。里面的大致规定就是你这个东西需要是一个压缩了的文件夹，文件夹里以 xxx 结构放 xxx 文件；</li>
+<li>容器要需要能接收哪些指令，这些指令的行为是什么，即 RuntimeSpec。这里面的大致内容就是“容器”要能够执行 “create”，“start”，“stop”，“delete” 这些命令，并且行为要规范。</li>
+</ul>
+<p>现在我们可以找到很多符合 OCI 标准或兼容了 CRI 接口的项目，而这些项目就大体构成了整个 Kuberentes 的 Runtime 生态：</p>
+<ul>
+<li>OCI Compatible：runC，Kata（以及它的前身 runV 和 Clear Containers），gVisor。其它比较偏门的还有 Rust 写的 railcar</li>
+<li>CRI Compatible：Docker（借助 dockershim），containerd（借助 CRI-containerd），CRI-O，Frakti，etc</li>
+</ul>
+<h5 id="Runtime-方案-Docker"><a href="#Runtime-方案-Docker" class="headerlink" title="Runtime 方案 Docker"></a>Runtime 方案 Docker</h5><p><img src="https://ss.csdn.net/p?https://mmbiz.qpic.cn/mmbiz_jpg/A1HKVXsfHNluDm1kz1uWjpKiajs713ia8xqVPwgQsicMicpyOPXYggpBTLoUBgWMWJjYGb5LhxMapTrUB1uBPIT7sA/640?wx_fmt=jpeg" alt="640?wx_fmt=jpeg"></p>
+<ol>
+<li>Kubelet 通过 CRI 接口（gRPC）调用 dockershim，请求创建一个容器。CRI 即容器运行时接口（Container Runtime Interface），这一步中，Kubelet 可以视作一个简单的 CRI Client，而 dockershim 就是接收请求的 Server。目前 dockershim 的代码其实是内嵌在 Kubelet 中的，所以接收调用的凑巧就是 Kubelet 进程；</li>
+<li>dockershim 收到请求后，转化成 Docker Daemon 能听懂的请求，发到 Docker Daemon 上请求创建一个容器；</li>
+<li>Docker Daemon 早在 1.12 版本中就已经将针对容器的操作移到另一个守护进程——containerd 中了，因此 Docker Daemon 仍然不能帮我们创建容器，而是要请求 containerd 创建一个容器；</li>
+<li>containerd 收到请求后，并不会自己直接去操作容器，而是创建一个叫做 containerd-shim 的进程，让 containerd-shim 去操作容器。这是因为容器进程需要一个父进程来做诸如收集状态，维持 stdin 等 fd 打开等工作。而假如这个父进程就是 containerd，那每次 containerd 挂掉或升级，整个宿主机上所有的容器都得退出了。而引入了 containerd-shim 就规避了这个问题（containerd 和 shim 并不是父子进程关系）；</li>
+<li>我们知道创建容器需要做一些设置 namespaces 和 cgroups，挂载 root filesystem 等等操作，而这些事该怎么做已经有了公开的规范了，那就是 OCI（Open Container Initiative，开放容器标准）。它的一个参考实现叫做 runC。于是，containerd-shim 在这一步需要调用 runC 这个命令行工具，来启动容器；</li>
+<li>runC 启动完容器后本身会直接退出，containerd-shim 则会成为容器进程的父进程，负责收集容器进程的状态，上报给 containerd，并在容器中 pid 为 1 的进程退出后接管容器中的子进程进行清理，确保不会出现僵尸进程。</li>
+</ol>
+<h2 id="Master-与-Node如何通信"><a href="#Master-与-Node如何通信" class="headerlink" title="Master 与 Node如何通信"></a>Master 与 Node如何通信</h2><h3 id="Cluster-gt-Master"><a href="#Cluster-gt-Master" class="headerlink" title="Cluster -&gt; Master"></a>Cluster -&gt; Master</h3><p>从集群到Master节点的所有通信路径都在apiserver（443端口）中进行。<br>Node节点应该配置为集群的公共根证书，以便安全地连接到apiserver。<br>希望连接到apiserver的Pod可以通过service account来实现，以便Kubernetes在实例化时自动将公共根证书和有效的bearer token插入到pod中，kubernetes service (在所有namespaces中)都配置了一个虚拟IP地址，该IP地址由apiserver重定向(通过kube - proxy)到HTTPS。<br>Master组件通过非加密(未加密或认证)端口与集群apiserver通信。这个端口通常只在Master主机的localhost接口上暴露。</p>
+<h3 id="Master-gt-Cluster"><a href="#Master-gt-Cluster" class="headerlink" title="Master -&gt; Cluster"></a>Master -&gt; Cluster</h3><p>从Master (apiserver)到集群有两个主要的通信路径。<br>第一是从apiserver到在集群中的每个节点上运行的kubelet进程。<br>第二是通过apiserver的代理功能从apiserver到任何node、pod或service 。</p>
+<h2 id="核心-Addons-amp-Plugins"><a href="#核心-Addons-amp-Plugins" class="headerlink" title="核心 Addons &amp; Plugins"></a>核心 Addons &amp; Plugins</h2><h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p>DNS 为集群的服务发现提供的支持，Kubernetes 1.13 开始默认使用 <a target="_blank" rel="noopener" href="https://coredns.io/">CoreDNS</a>。域名系统（DNS）是一种用于将各种类型的信息（例如IP地址）与易于记忆的名称相关联的系统。 默认情况下，大多数Kubernetes群集会自动配置内部DNS服务，以便为服务发现提供轻量级机制。 内置的服务发现使应用程序更容易在Kubernetes集群上相互查找和通信：</p>
+<ul>
+<li>kube-dns服务监听来自Kubernetes API的服务service和端点endpoint事件，并根据需要更新其DNS记录。 创建，更新或删除Kubernetes服务及其关联的pod时会触发这些事件</li>
+<li>kubelet将每个新Pod的/etc/resolv.conf名称服务器选项设置为kube-dns服务的集群IP，并使用适当的搜索选项以允许使用更短的主机名</li>
+<li>在容器中运行的应用程序可以将主机名（例如example-service.namespace）解析为正确的群集IP地址</li>
+</ul>
+<p><img src="https://mutoulazy-public.oss-cn-shenzhen.aliyuncs.com/images/core-dns.png" alt="img"></p>
+<h3 id="Network-Plugin"><a href="#Network-Plugin" class="headerlink" title="Network Plugin"></a>Network Plugin</h3><p>Kubernetes 多节点环境需要部署网络插件才可以使用，默认情况下使用 <a target="_blank" rel="noopener" href="https://github.com/coreos/flannel">flannel</a> 即可。</p>
+<h5 id="集群网络创建过程"><a href="#集群网络创建过程" class="headerlink" title="集群网络创建过程"></a>集群网络创建过程</h5><p><a href="https://mutoulazy.github.io/2019/11/04/kubernetes/%E9%9B%86%E7%BE%A4%E7%BD%91%E7%BB%9C%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/">图文介绍K8S 集群网络配置过程</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="http://docs.kubernetes.org.cn/251.html">Kubernetes架构</a><br><a target="_blank" rel="noopener" href="https://kuboard.cn/learning/k8s-bg/component.html#master%E7%BB%84%E4%BB%B6">Kubernetes组件</a><br><a target="_blank" rel="noopener" href="https://gitchat.csdn.net/columnTopic/5dba7d97c39a5f13a688abb1">etcd</a><br><a target="_blank" rel="noopener" href="https://blog.ihypo.net/15763910382218.html">Controller Manager</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1444694">kubelet详细解析</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/deaidai/article/details/98211850">kube-dns与kube-proxy</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">mutoulazy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mutoulazy.github.io/2020/04/14/kubernetes/framework/kubernetes-base-framework/">https://mutoulazy.github.io/2020/04/14/kubernetes/framework/kubernetes-base-framework/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mutoulazy.github.io" target="_blank">mutoulazy's space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/kubernetes/">kubernetes</a><a class="post-meta__tags" href="/tags/framework/">framework</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/21/linux/kong-0.14-to-2.0-api-change/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">kong 0.14到2.0版本 API变更</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/13/linux/%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85kong%202.0.3%E7%89%88%E6%9C%AC/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">源码安装kong 2.0.3版本</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2019/11/11/Java/使用SpringCloud Kubernetes组件获取Service/" title="使用SpringCloud Kubernetes组件获取Service"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-11</div><div class="title">使用SpringCloud Kubernetes组件获取Service</div></div></a></div><div><a href="/2019/11/12/Java/使用SpringCloud Kubernetes组件获取config和secret/" title="使用SpringCloud Kubernetes组件获取Config和Secret"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-12</div><div class="title">使用SpringCloud Kubernetes组件获取Config和Secret</div></div></a></div><div><a href="/2021/01/28/kubernetes/CSI-study/" title="kubernetes CSI"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-28</div><div class="title">kubernetes CSI</div></div></a></div><div><a href="/2019/11/02/kubernetes/Downward API从容器内获取Pod信息/" title="Downward API从容器内获取Pod信息"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-02</div><div class="title">Downward API从容器内获取Pod信息</div></div></a></div><div><a href="/2020/02/13/kubernetes/Dubbo、Spring Cloud和K8s的横向对比/" title="Dubbo、Spring Cloud和K8s的横向对比"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-13</div><div class="title">Dubbo、Spring Cloud和K8s的横向对比</div></div></a></div><div><a href="/2020/02/13/kubernetes/K8s中部署VS Code web版本/" title="K8s中部署VS Code web版本"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-13</div><div class="title">K8s中部署VS Code web版本</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/k8s.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">mutoulazy</div><div class="author-info__description">往者不谏，来者可追</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mutoulazy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mutoulazy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mutoulazy@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kubernetes-%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84"><span class="toc-text">Kubernetes 基础架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Master-amp-Node"><span class="toc-text">Master &amp; Node</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Master"><span class="toc-text">Master</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#kube-apiserver"><span class="toc-text">kube-apiserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#etcd"><span class="toc-text">etcd</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Etcd%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B"><span class="toc-text">Etcd写数据流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Etcd%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B"><span class="toc-text">Etcd读数据流程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Controller-Manager"><span class="toc-text">Controller Manager</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Scheduler"><span class="toc-text">Scheduler</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node"><span class="toc-text">Node</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kubelet"><span class="toc-text">Kubelet</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#LivenessProbe%E6%8E%A2%E9%92%88"><span class="toc-text">LivenessProbe探针</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ReadinessProbe%E6%8E%A2%E9%92%88"><span class="toc-text">ReadinessProbe探针</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#kubelet%E5%91%BD%E4%BB%A4%E6%8A%80%E5%B7%A7"><span class="toc-text">kubelet命令技巧</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kube-proxy"><span class="toc-text">Kube-proxy</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%9A%84iptables%E8%A7%84%E5%88%99"><span class="toc-text">主要的iptables规则</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Container-Runtime"><span class="toc-text">Container Runtime</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Runtime-%E6%96%B9%E6%A1%88-Docker"><span class="toc-text">Runtime 方案 Docker</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Master-%E4%B8%8E-Node%E5%A6%82%E4%BD%95%E9%80%9A%E4%BF%A1"><span class="toc-text">Master 与 Node如何通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cluster-gt-Master"><span class="toc-text">Cluster -&gt; Master</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Master-gt-Cluster"><span class="toc-text">Master -&gt; Cluster</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83-Addons-amp-Plugins"><span class="toc-text">核心 Addons &amp; Plugins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS"><span class="toc-text">DNS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Network-Plugin"><span class="toc-text">Network Plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E7%BD%91%E7%BB%9C%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="toc-text">集群网络创建过程</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitea与drone CICD"/></a><div class="content"><a class="title" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">gitea与drone CICD</a><time datetime="2021-04-30T03:00:00.000Z" title="发表于 2021-04-30 11:00:00">2021-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="filebeat采集集群应用日志"/></a><div class="content"><a class="title" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">filebeat采集集群应用日志</a><time datetime="2021-04-26T03:00:00.000Z" title="发表于 2021-04-26 11:00:00">2021-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="openLDAP服务搭建与使用"/></a><div class="content"><a class="title" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">openLDAP服务搭建与使用</a><time datetime="2021-04-01T05:24:00.000Z" title="发表于 2021-04-01 13:24:00">2021-04-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By mutoulazy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://mutoulazy.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

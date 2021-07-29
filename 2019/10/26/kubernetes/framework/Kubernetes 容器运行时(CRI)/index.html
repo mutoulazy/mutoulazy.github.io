@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kubernetes 容器运行时（CRI） | mutoulazy's space</title><meta name="keywords" content="kubernetes,cri"><meta name="author" content="mutoulazy"><meta name="copyright" content="mutoulazy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Kubernetes 容器运行时（CRI）kubernetes各个组件MasterMaster 是整个集群的大脑，所有的编排、调度、API 访问等都由 Master 来负责  etcd 保存了整个集群的状态 kube-apiserver 提供了资源操作的唯一入口，并提供认证、授权、访问控制、API  注册和发现等机制。并且无论是集群内部还是外部的组件，都必须通过API Server来访问数据 ku">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes 容器运行时（CRI）">
+<meta property="og:url" content="https://mutoulazy.github.io/2019/10/26/kubernetes/framework/Kubernetes%20%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6(CRI)/index.html">
+<meta property="og:site_name" content="mutoulazy&#39;s space">
+<meta property="og:description" content="Kubernetes 容器运行时（CRI）kubernetes各个组件MasterMaster 是整个集群的大脑，所有的编排、调度、API 访问等都由 Master 来负责  etcd 保存了整个集群的状态 kube-apiserver 提供了资源操作的唯一入口，并提供认证、授权、访问控制、API  注册和发现等机制。并且无论是集群内部还是外部的组件，都必须通过API Server来访问数据 ku">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png">
+<meta property="article:published_time" content="2019-10-26T06:26:15.000Z">
+<meta property="article:modified_time" content="2021-07-28T09:58:05.000Z">
+<meta property="article:author" content="mutoulazy">
+<meta property="article:tag" content="kubernetes">
+<meta property="article:tag" content="cri">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mutoulazy.github.io/2019/10/26/kubernetes/framework/Kubernetes%20%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6(CRI)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: mutoulazy","link":"链接: ","source":"来源: mutoulazy's space","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kubernetes 容器运行时（CRI）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-28 17:58:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/k8s.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">mutoulazy's space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Kubernetes 容器运行时（CRI）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-10-26T06:26:15.000Z" title="发表于 2019-10-26 14:26:15">2019-10-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-28T09:58:05.000Z" title="更新于 2021-07-28 17:58:05">2021-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kubernetes/">kubernetes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Kubernetes 容器运行时（CRI）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="Kubernetes-容器运行时（CRI）"><a href="#Kubernetes-容器运行时（CRI）" class="headerlink" title="Kubernetes 容器运行时（CRI）"></a>Kubernetes 容器运行时（CRI）</h2><h3 id="kubernetes各个组件"><a href="#kubernetes各个组件" class="headerlink" title="kubernetes各个组件"></a>kubernetes各个组件</h3><h4 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h4><p>Master 是整个集群的大脑，所有的编排、调度、API 访问等都由 Master 来负责</p>
+<ul>
+<li>etcd 保存了整个集群的状态</li>
+<li>kube-apiserver 提供了资源操作的唯一入口，并提供认证、授权、访问控制、API </li>
+<li>注册和发现等机制。并且无论是集群内部还是外部的组件，都必须通过API Server来访问数据</li>
+<li>kube-controller-manager 负责维护集群的状态，包括很多资源的控制器，是保证 Kubernetes 声明式 API工作的大脑，比如故障检测、自动扩展、滚动更新等</li>
+<li>kube-scheduler 负责资源的调度，按照预定的调度策略将 Pod 调度到相应的 Node 上</li>
+</ul>
+<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p>负责运行具体的容器，并为容器提供存储、网络等必要的功能</p>
+<ul>
+<li>kubelet 负责维持容器的生命周期，同时也负责 Volume（CSI）和网络（CNI）的管理</li>
+<li>Container runtime 负责镜像管理以及 Pod 和容器的真正运行。Kubelet 默认的容器运行时为 Docker</li>
+<li>kube-proxy 负责为 Service 提供 cluster 内部的服务发现和负载均衡</li>
+<li>Network plugin 也就基于 CNI（Container Network Internface）负责为容器配置网络</li>
+</ul>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><ul>
+<li>扩展（Addon），比如 dashboard、EFK、Prometheus、各种 Operator 等，这些扩展不需要 Kubernetes 提供标准的接口，但是都为 Kubernetes 增加了新的功能特性</li>
+<li>插件（Plugin），比如 CNI、CRI、CSI、Device Plugin 等，这些都是 Kubernetes 各个核心组件提供了标准的内置接口，而外部插件则是实现这些接口，从而将 Kubernetes 扩展到更多的用例场景中</li>
+</ul>
+<h3 id="Kubelet中的CRI"><a href="#Kubelet中的CRI" class="headerlink" title="Kubelet中的CRI"></a>Kubelet中的CRI</h3><p><img src="https://pic4.zhimg.com/80/v2-0e49add0cd6c8cd24e2b5c71b6544363_hd.jpg" alt="img"></p>
+<ul>
+<li>Kubelet Server 对外提供 API，供 kube-apiserver、metrics-server 等服务调用。比如 kubectl exec 需要通过 Kubelet API /exec/{token} 与容器进行交互。</li>
+<li>Container Manager 管理容器的各种资源，比如 cgroups、QoS、cpuset、device 等。<br>Volume Manager 管理容器的存储卷，比如格式化磁盘、挂载到 Node 本地、最后再将挂载路径传给容器。</li>
+<li>Eviction 负责容器的驱逐，比如在资源不足时驱逐优先级低的容器，保证高优先级容器的运行。</li>
+<li>cAdvisor 负责为容器提供 metrics 数据源。</li>
+<li>Metrics 和 stats 提供容器和节点的度量数据，比如 metrics-server 通过 /stats/summary 提取的度量数据是 HPA 自动扩展的依据。</li>
+<li>再向下就是 Generic Runtime Manager，这是容器运行时的管理者，负责跟 CRI 交互，完成容器和镜像的管理。</li>
+<li>在 CRI 之下，包括两种容器运行时的实现<br>一个是内置的 dockershim，实现了 docker 容器引擎的支持以及 CNI 网络插件（包括 kubenet）的支持<br>另一个就是外部的容器运行时，用来支持 runc、containerd、gvisor 等外部容器运行时。</li>
+</ul>
+<h4 id="Kubernetes-中的容器运行时按照不同的功能就可以分为三个部分："><a href="#Kubernetes-中的容器运行时按照不同的功能就可以分为三个部分：" class="headerlink" title="Kubernetes 中的容器运行时按照不同的功能就可以分为三个部分："></a>Kubernetes 中的容器运行时按照不同的功能就可以分为三个部分：</h4><ol>
+<li>Kubelet 中容器运行时的管理模块 Generic Runtime Manager，它通过 CRI 来管理容器和镜像。</li>
+<li>容器运行时接口，是 Kubelet 与外部容器运行时的通信接口。</li>
+<li>容器运行时实现，包括 Kubelet 内置的 dockershim 以及外部的容器运行时（如 cri-o、cri-containerd 等）</li>
+</ol>
+<h3 id="容器运行时接口（CRI）"><a href="#容器运行时接口（CRI）" class="headerlink" title="容器运行时接口（CRI）"></a>容器运行时接口（CRI）</h3><p>容器运行时接口（CRI），顾名思义，用来在 Kubernetes 扩展容器运行时，从而用户可以选择自己喜欢的容器引擎。</p>
+<h4 id="CRI-接口"><a href="#CRI-接口" class="headerlink" title="CRI 接口"></a>CRI 接口</h4><p>CRI 是基于 gPRC 的，用户不需要关心内部通信逻辑，而只需要实现定义的接口就可以，包括 RuntimeService 和 ImageService: RuntimeService负责管理Pod和容器的生命周期，而ImageService负责镜像的生命周期管理<br><img src="https://pic2.zhimg.com/80/v2-0fc883e7259cd6ffd2f298df261e92b5_hd.jpg" alt="img"></p>
+<ul>
+<li><p>管理镜像的 ImageService 提供了 5 个接口，分别是查询镜像列表、拉取镜像到本地、查询镜像状态、删除本地镜像以及查询镜像占用空间等。这些都很容易映射到 docker API 或者 CLI 上面。</p>
+</li>
+<li><p>而 RuntimeService 则提供了更多的接口，按照功能可以划分为四组：</p>
+</li>
+</ul>
+<ol>
+<li>PodSandbox 的管理接口：PodSandbox 是对 Kubernete Pod 的抽象，用来给容器提供一个隔离的环境（比如挂载到相同的 cgroup 下面），并提供网络等共享的命名空间。PodSandbox 通常对应到一个 Pause 容器或者一台虚拟机。</li>
+<li>Container 的管理接口：在指定的 PodSandbox 中创建、启动、停止和删除容器。</li>
+<li>Streaming API 接口：包括 Exec、Attach 和 PortForward 等三个和容器进行数据交互的接口，这三个接口返回的是运行时 Streaming Server 的 URL，而不是直接跟容器交互。</li>
+<li>状态接口，包括查询 API 版本和查询运行时状态。</li>
+</ol>
+<h4 id="Streaming-API"><a href="#Streaming-API" class="headerlink" title="Streaming API"></a>Streaming API</h4><p>Streaming API 用于客户端与容器需要交互的场景，所以采用的是流式接口，包括 Exec、PortForward 和 Attach 等。Kubelet 内置的 docker 通过 nsenter、socat 等方法来支持这些特性，但它们不一定适用于其他的运行时。因而，CRI 也显式定义了这些 API，并且要求容器运行时返回一个 streaming server 的 URL 以便 Kubelet 重定向 API Server 发送过来的流式请求。<br><img src="https://pic4.zhimg.com/80/v2-ffa010883e2fa4107184d9f8228180cf_hd.jpg" alt="img"></p>
+<p>这样一个完整的 Exec 流程就是</p>
+<ul>
+<li>客户端 kubectl exec -i -t …</li>
+</ul>
+<ol>
+<li>kube-apiserver 向 Kubelet 发送流式请求 /exec/</li>
+<li>Kubelet 通过 CRI 接口向 CRI Shim 请求 Exec 的 URL</li>
+<li>CRI Shim 向 Kubelet 返回 Exec URL</li>
+<li>Kubelet 向 kube-apiserver 返回重定向的响应</li>
+<li>kube-apiserver 重定向流式请求到 Exec URL，接着就是 CRI Shim 内部的 Streaming Server 跟 kube-apiserver 进行数据交互，完成 Exec 的请求和响应</li>
+</ol>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/73728920">参考链接1</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">mutoulazy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mutoulazy.github.io/2019/10/26/kubernetes/framework/Kubernetes%20%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6(CRI)/">https://mutoulazy.github.io/2019/10/26/kubernetes/framework/Kubernetes 容器运行时(CRI)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mutoulazy.github.io" target="_blank">mutoulazy's space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/kubernetes/">kubernetes</a><a class="post-meta__tags" href="/tags/cri/">cri</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/10/27/kubernetes/kubernetes%20%E5%AE%89%E8%A3%85metrics%20Server/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">kudbernetes安装 Metrics-server</div></div></a></div><div class="next-post pull-right"><a href="/2019/10/25/kubernetes/framework/pod%E8%B0%83%E5%BA%A6/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">pod调度</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2019/11/11/Java/使用SpringCloud Kubernetes组件获取Service/" title="使用SpringCloud Kubernetes组件获取Service"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-11</div><div class="title">使用SpringCloud Kubernetes组件获取Service</div></div></a></div><div><a href="/2019/11/12/Java/使用SpringCloud Kubernetes组件获取config和secret/" title="使用SpringCloud Kubernetes组件获取Config和Secret"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-12</div><div class="title">使用SpringCloud Kubernetes组件获取Config和Secret</div></div></a></div><div><a href="/2021/01/28/kubernetes/CSI-study/" title="kubernetes CSI"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-28</div><div class="title">kubernetes CSI</div></div></a></div><div><a href="/2019/11/02/kubernetes/Downward API从容器内获取Pod信息/" title="Downward API从容器内获取Pod信息"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-02</div><div class="title">Downward API从容器内获取Pod信息</div></div></a></div><div><a href="/2020/02/13/kubernetes/Dubbo、Spring Cloud和K8s的横向对比/" title="Dubbo、Spring Cloud和K8s的横向对比"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-13</div><div class="title">Dubbo、Spring Cloud和K8s的横向对比</div></div></a></div><div><a href="/2020/02/13/kubernetes/K8s中部署VS Code web版本/" title="K8s中部署VS Code web版本"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-13</div><div class="title">K8s中部署VS Code web版本</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/k8s.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">mutoulazy</div><div class="author-info__description">往者不谏，来者可追</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mutoulazy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mutoulazy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mutoulazy@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Kubernetes-%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6%EF%BC%88CRI%EF%BC%89"><span class="toc-text">Kubernetes 容器运行时（CRI）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kubernetes%E5%90%84%E4%B8%AA%E7%BB%84%E4%BB%B6"><span class="toc-text">kubernetes各个组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Master"><span class="toc-text">Master</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Node"><span class="toc-text">Node</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95"><span class="toc-text">扩展</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kubelet%E4%B8%AD%E7%9A%84CRI"><span class="toc-text">Kubelet中的CRI</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kubernetes-%E4%B8%AD%E7%9A%84%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E6%8C%89%E7%85%A7%E4%B8%8D%E5%90%8C%E7%9A%84%E5%8A%9F%E8%83%BD%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%88%86%E4%B8%BA%E4%B8%89%E4%B8%AA%E9%83%A8%E5%88%86%EF%BC%9A"><span class="toc-text">Kubernetes 中的容器运行时按照不同的功能就可以分为三个部分：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E6%8E%A5%E5%8F%A3%EF%BC%88CRI%EF%BC%89"><span class="toc-text">容器运行时接口（CRI）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CRI-%E6%8E%A5%E5%8F%A3"><span class="toc-text">CRI 接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Streaming-API"><span class="toc-text">Streaming API</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitea与drone CICD"/></a><div class="content"><a class="title" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">gitea与drone CICD</a><time datetime="2021-04-30T03:00:00.000Z" title="发表于 2021-04-30 11:00:00">2021-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="filebeat采集集群应用日志"/></a><div class="content"><a class="title" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">filebeat采集集群应用日志</a><time datetime="2021-04-26T03:00:00.000Z" title="发表于 2021-04-26 11:00:00">2021-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="openLDAP服务搭建与使用"/></a><div class="content"><a class="title" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">openLDAP服务搭建与使用</a><time datetime="2021-04-01T05:24:00.000Z" title="发表于 2021-04-01 13:24:00">2021-04-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By mutoulazy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://mutoulazy.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

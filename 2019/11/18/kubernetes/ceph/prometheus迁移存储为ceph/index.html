@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>prometheus迁移存储为ceph | mutoulazy's space</title><meta name="keywords" content="kubernetes,prometheus,ceph"><meta name="author" content="mutoulazy"><meta name="copyright" content="mutoulazy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="prometheus迁移存储为ceph在Rook-Ceph集群中创建基于块存储的StorageClass1234567891011121314151617181920apiVersion: ceph.rook.io&#x2F;v1kind: CephBlockPoolmetadata:  name: replicapool  namespace: rook-cephspec:  failureDomain:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="prometheus迁移存储为ceph">
+<meta property="og:url" content="https://mutoulazy.github.io/2019/11/18/kubernetes/ceph/prometheus%E8%BF%81%E7%A7%BB%E5%AD%98%E5%82%A8%E4%B8%BAceph/index.html">
+<meta property="og:site_name" content="mutoulazy&#39;s space">
+<meta property="og:description" content="prometheus迁移存储为ceph在Rook-Ceph集群中创建基于块存储的StorageClass1234567891011121314151617181920apiVersion: ceph.rook.io&#x2F;v1kind: CephBlockPoolmetadata:  name: replicapool  namespace: rook-cephspec:  failureDomain:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png">
+<meta property="article:published_time" content="2019-11-18T03:26:15.000Z">
+<meta property="article:modified_time" content="2021-07-28T09:58:05.000Z">
+<meta property="article:author" content="mutoulazy">
+<meta property="article:tag" content="kubernetes">
+<meta property="article:tag" content="prometheus">
+<meta property="article:tag" content="ceph">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mutoulazy.github.io/2019/11/18/kubernetes/ceph/prometheus%E8%BF%81%E7%A7%BB%E5%AD%98%E5%82%A8%E4%B8%BAceph/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: mutoulazy","link":"链接: ","source":"来源: mutoulazy's space","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'prometheus迁移存储为ceph',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-28 17:58:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/k8s.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">mutoulazy's space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">prometheus迁移存储为ceph</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-11-18T03:26:15.000Z" title="发表于 2019-11-18 11:26:15">2019-11-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-28T09:58:05.000Z" title="更新于 2021-07-28 17:58:05">2021-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kubernetes/">kubernetes</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kubernetes/ceph/">ceph</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="prometheus迁移存储为ceph"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="prometheus迁移存储为ceph"><a href="#prometheus迁移存储为ceph" class="headerlink" title="prometheus迁移存储为ceph"></a>prometheus迁移存储为ceph</h1><h2 id="在Rook-Ceph集群中创建基于块存储的StorageClass"><a href="#在Rook-Ceph集群中创建基于块存储的StorageClass" class="headerlink" title="在Rook-Ceph集群中创建基于块存储的StorageClass"></a>在Rook-Ceph集群中创建基于块存储的StorageClass</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">ceph.rook.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">CephBlockPool</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">replicapool</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">rook-ceph</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">failureDomain:</span> <span class="string">host</span></span><br><span class="line">  <span class="attr">replicated:</span></span><br><span class="line">    <span class="attr">size:</span> <span class="number">4</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">   <span class="attr">name:</span> <span class="string">rook-ceph-block</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.rook.io/block</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line">  <span class="attr">blockPool:</span> <span class="string">replicapool</span></span><br><span class="line">  <span class="attr">clusterNamespace:</span> <span class="string">rook-ceph</span></span><br><span class="line">  <span class="attr">fstype:</span> <span class="string">xfs</span></span><br><span class="line"><span class="attr">reclaimPolicy:</span> <span class="string">Retain</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="调整Prometheus-opretor中的prometheus的存储"><a href="#调整Prometheus-opretor中的prometheus的存储" class="headerlink" title="调整Prometheus-opretor中的prometheus的存储"></a>调整Prometheus-opretor中的prometheus的存储</h2><p>修改prometheus的存储StorageClass 为 rook-ceph-block</p>
+<p><code>kubectl edit prometheuses.monitoring.coreos.com c2-monitor-prometheus-oper-prometheus -n admin</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">...</span></span><br><span class="line"><span class="attr">storage:</span></span><br><span class="line">    <span class="attr">volumeClaimTemplate:</span></span><br><span class="line">      <span class="attr">spec:</span></span><br><span class="line">        <span class="attr">accessModes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          <span class="attr">requests:</span></span><br><span class="line">            <span class="attr">storage:</span> <span class="string">30Gi</span></span><br><span class="line">        <span class="attr">storageClassName:</span> <span class="string">rook-ceph-block</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果修改后没有效果，则需要去删除掉以前绑定的pvc后再重启Prometheus Pod</p>
+<ul>
+<li>注意在删除老pvc之前注意以前历史数据存储的位置，如果保留策略为delete则需要备份历史数据</li>
+</ul>
+<h2 id="检查prometheus是否重启成功"><a href="#检查prometheus是否重启成功" class="headerlink" title="检查prometheus是否重启成功"></a>检查prometheus是否重启成功</h2><p>若prometheus重启正常且底层存储成功切换成ceph的StorageClass存储，就可以开始迁移历史数据到prometheus中</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get pod -n admin | grep prome</span></span><br><span class="line">prometheus-c2-monitor-prometheus-oper-prometheus-0        3/3       Running   0          2h</span><br><span class="line"></span><br><span class="line"><span class="comment"># kubectl get pv -n admin | grep 30Gi</span></span><br><span class="line">pvc-77d9ba2c-09ac-11ea-8b13-005056925f82    30Gi       RWX            Retain           Bound     admin/prometheus-c2-monitor-prometheus-oper-prometheus-db-prometheus-c2-monitor-prometheus-oper-prometheus-0   rook-ceph-block             3h</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="历史数据迁移"><a href="#历史数据迁移" class="headerlink" title="历史数据迁移"></a>历史数据迁移</h2><p>首先定位到以前的老数据目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ prometheus-db]# ls</span><br><span class="line">01DRPGYK0X5XKF4DDRQ09T5WPY  01DS1WW6WNN6EG3QCNRK87X3YJ  01DSDFNF35TRFPRGVR5Y9C05HN  01DSS2ES0G0D4WJQ2ZATW73S49  01DSWY1JG4099RSG4GFQF07MJ0  01DSXJMP7FDV0W3MPGWYHBR909  01DSY0C2WCV86QX8HZC10C20RA</span><br><span class="line">01DRW3FJB9DEGMEKWEWP6TFMAK  01DS7P8SK48ZRAM6W2QE578QAP  01DSK921QVSVTZ03HA8JWZ9DR7  01DSV08CZJY5SNMHDSSCZP1N0X  01DSXJMMBPT9A4FH6QSFZ7ZFEP  01DSXSGBMCA55462EQ46FKGPGM  wal</span><br></pre></td></tr></table></figure>
+
+<p>删除掉历史数据中的wal目录，<code>rm wal</code></p>
+<p>借助<code>kubectl cp</code>命令 或者 <code>docker cp</code> 完成历史数据到容器中的迁移</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker cp prometheus-db/. ca58c0c65cef:/prometheus</span><br></pre></td></tr></table></figure>
+
+<p>完成复制命令后重启prometheus的pod，待pod正常启动后完成数据迁移</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入prometheus容器中检查迁移是否完成</span></span><br><span class="line">/prometheus $ ls</span><br><span class="line">01DRPGYK0X5XKF4DDRQ09T5WPY  01DS1WW6WNN6EG3QCNRK87X3YJ  01DSDFNF35TRFPRGVR5Y9C05HN  01DSS2ES0G0D4WJQ2ZATW73S49  01DSWY1JG4099RSG4GFQF07MJ0  01DSYE3KTWWCGX0MSY4ZNKRMDJ  wal</span><br><span class="line">01DRW3FJB9DEGMEKWEWP6TFMAK  01DS7P8SK48ZRAM6W2QE578QAP  01DSK921QVSVTZ03HA8JWZ9DR7  01DSV08CZJY5SNMHDSSCZP1N0X  01DSXJMP7FDV0W3MPGWYHBR909  01DSYE3N4ZMK606TWRENR57GG8</span><br><span class="line"></span><br><span class="line">/prometheus $ df -h</span><br><span class="line">Filesystem                Size      Used Available Use% Mounted on</span><br><span class="line">/dev/rbd0                30.0G      1.9G     28.1G   6% /prometheus</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="当数据出现问题导致prometheus无法启动的解决方法"><a href="#当数据出现问题导致prometheus无法启动的解决方法" class="headerlink" title="当数据出现问题导致prometheus无法启动的解决方法"></a>当数据出现问题导致prometheus无法启动的解决方法</h2><p>当挂载存储容器prometheus异常时，我们没法直接通过prometheus的挂载去修改问题数据，此时我们可以通过手动新建一个容器来挂载问题pvc，删除错误数据</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">busy-box-test1</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">restartPolicy:</span> <span class="string">OnFailure</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busy-box-test1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">busybox</span></span><br><span class="line">    <span class="attr">volumeMounts:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busy-box-test-pv1</span></span><br><span class="line">      <span class="attr">mountPath:</span> <span class="string">/mnt/busy-box</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&quot;sleep&quot;</span>, <span class="string">&quot;60000&quot;</span>]</span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busy-box-test-pv1</span></span><br><span class="line">    <span class="attr">persistentVolumeClaim:</span></span><br><span class="line">      <span class="comment"># 有异常数据的pvc</span></span><br><span class="line">      <span class="attr">claimName:</span> <span class="string">prometheus-c2-monitor-prometheus-oper-prometheus-db-prometheus-c2-monitor-prometheus-oper-prometheus-0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果pv的绑定模式为ReadWriteOnce时，可能会导致busy-box无法正常启动，此时我们关闭掉其他挂载此pvc的pod即可完成启动。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">mutoulazy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://mutoulazy.github.io/2019/11/18/kubernetes/ceph/prometheus%E8%BF%81%E7%A7%BB%E5%AD%98%E5%82%A8%E4%B8%BAceph/">https://mutoulazy.github.io/2019/11/18/kubernetes/ceph/prometheus迁移存储为ceph/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://mutoulazy.github.io" target="_blank">mutoulazy's space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/kubernetes/">kubernetes</a><a class="post-meta__tags" href="/tags/prometheus/">prometheus</a><a class="post-meta__tags" href="/tags/ceph/">ceph</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/11/19/kubernetes/ceph/rbd%E5%BF%AB%E7%85%A7%E7%9A%84%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%AD%89%E6%93%8D%E4%BD%9C/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">rbd快照的导入导出等操作</div></div></a></div><div class="next-post pull-right"><a href="/2019/11/17/TopList/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">好的文章目录</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2019/11/21/kubernetes/ceph/ceph pool快照与回滚/" title="ceph pool快照与回滚"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-21</div><div class="title">ceph pool快照与回滚</div></div></a></div><div><a href="/2019/11/21/kubernetes/ceph/cephfs快照与恢复/" title="cephfs快照与恢复"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-21</div><div class="title">cephfs快照与恢复</div></div></a></div><div><a href="/2019/11/19/kubernetes/ceph/rbd快照的导入导出等操作/" title="rbd快照的导入导出等操作"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-19</div><div class="title">rbd快照的导入导出等操作</div></div></a></div><div><a href="/2019/07/31/kubernetes/prometheus/prometheus-alert-record/" title="prometheus 中的 alert record"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-07-31</div><div class="title">prometheus 中的 alert record</div></div></a></div><div><a href="/2019/06/28/kubernetes/prometheus/prometheus-drop-metrics/" title="prometheus中如何过滤不需要的指标"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-06-28</div><div class="title">prometheus中如何过滤不需要的指标</div></div></a></div><div><a href="/2018/12/05/kubernetes/prometheus/prometheus-k8s-metrics/" title="Prometheus 监控k8s的一些重要指标"><img class="cover" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2018-12-05</div><div class="title">Prometheus 监控k8s的一些重要指标</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/k8s.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">mutoulazy</div><div class="author-info__description">往者不谏，来者可追</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mutoulazy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mutoulazy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mutoulazy@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prometheus%E8%BF%81%E7%A7%BB%E5%AD%98%E5%82%A8%E4%B8%BAceph"><span class="toc-text">prometheus迁移存储为ceph</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8Rook-Ceph%E9%9B%86%E7%BE%A4%E4%B8%AD%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E5%9D%97%E5%AD%98%E5%82%A8%E7%9A%84StorageClass"><span class="toc-text">在Rook-Ceph集群中创建基于块存储的StorageClass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E6%95%B4Prometheus-opretor%E4%B8%AD%E7%9A%84prometheus%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-text">调整Prometheus-opretor中的prometheus的存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5prometheus%E6%98%AF%E5%90%A6%E9%87%8D%E5%90%AF%E6%88%90%E5%8A%9F"><span class="toc-text">检查prometheus是否重启成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB"><span class="toc-text">历史数据迁移</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%93%E6%95%B0%E6%8D%AE%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98%E5%AF%BC%E8%87%B4prometheus%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">当数据出现问题导致prometheus无法启动的解决方法</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitea与drone CICD"/></a><div class="content"><a class="title" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">gitea与drone CICD</a><time datetime="2021-04-30T03:00:00.000Z" title="发表于 2021-04-30 11:00:00">2021-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="filebeat采集集群应用日志"/></a><div class="content"><a class="title" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">filebeat采集集群应用日志</a><time datetime="2021-04-26T03:00:00.000Z" title="发表于 2021-04-26 11:00:00">2021-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="openLDAP服务搭建与使用"/></a><div class="content"><a class="title" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">openLDAP服务搭建与使用</a><time datetime="2021-04-01T05:24:00.000Z" title="发表于 2021-04-01 13:24:00">2021-04-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By mutoulazy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://mutoulazy.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

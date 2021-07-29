@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>mutoulazy's space</title><meta name="author" content="mutoulazy"><meta name="copyright" content="mutoulazy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="往者不谏，来者可追">
+<meta property="og:type" content="website">
+<meta property="og:title" content="mutoulazy&#39;s space">
+<meta property="og:url" content="https://mutoulazy.github.io/index.html">
+<meta property="og:site_name" content="mutoulazy&#39;s space">
+<meta property="og:description" content="往者不谏，来者可追">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mutoulazy.github.io/img/k8s.png">
+<meta property="article:author" content="mutoulazy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mutoulazy.github.io/img/k8s.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://mutoulazy.github.io/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: mutoulazy","link":"链接: ","source":"来源: mutoulazy's space","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mutoulazy\'s space',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-29 11:54:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/k8s.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://api.dujin.org/bing/1920.php')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">mutoulazy's space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">mutoulazy's space</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/mutoulazy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mutoulazy@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2019/11/17/TopList/" title="好的文章目录">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="好的文章目录"></a></div><div class="recent-post-info"><a class="article-title" href="/2019/11/17/TopList/" title="好的文章目录">好的文章目录</a><div class="article-meta-wrap"><span class="article-meta"><i class="fas fa-thumbtack sticky"></i><span class="sticky">置顶</span><span class="article-meta__separator">|</span></span><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-11-17T06:26:15.000Z" title="发表于 2019-11-17 14:26:15">2019-11-17</time></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/share/">share</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/collect/">collect</a></span></div><div class="content">在此文章下分享值得阅读和学习的部分文章链接
+1 dockerDockerfile 参考文档
+Docker-Compose+Gitlab+Harbor+Jenkins 实现快速部署持续集成测试环境
+Kubernetes + Jenkins + Helm + Springboot
+1.1 docker探索docker 架构与基本使用docker 架构与基本使用2
+Docker 背后的内核知识——cgroups 资源限制
+runlike通过容器打印出容器的启动命令 与 whaler通过镜像导出dockerfile
+镜像构建的原理容器镜像基于BuildKit优化Dockerfile的构建docker 最小化构建镜像经验
+使用 Docker build 构建 yum/apt 离线源
+从 container 到 podcgroup基本概念docker系列–namespace解读
+Docker v1.10.3版本 docker stats分析
+docker buildx插件解决 多平台docker镜像问题
+Docker v1.2版本 源码分析(一)：Docker 架构Docker v1.2版本 源码 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitea与drone CICD"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">gitea与drone CICD</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-04-30T03:00:00.000Z" title="发表于 2021-04-30 11:00:00">2021-04-30</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a><i class="fas fa-angle-right"></i><a class="article-meta__categories" href="/categories/kubernetes/CICD/">CICD</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/drone/">drone</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/gitea/">gitea</a></span></div><div class="content">gitea与drone CICD使用helm完成gitea的搭建添加gitea helm repo地址helm repo add gitea-charts https://dl.gitea.io/charts/
+拉取最新的chart包helm pull gitea-charts/gitea
+修改 部署value.yaml文件
+12345678910111213141516171819# 修改通过nodeport对外提供服务service:  http:    type: NodePort    port: 3000    #clusterIP: None    #loadBalancerIP:    #nodePort:    annotations:  ssh:    type: NodePort    port: 22    #clusterIP: None    #loadBalancerIP:    #nodePort:    #externalTrafficPolicy:    #externalIPs:    loadBalancerSourceRanges: []     ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="filebeat采集集群应用日志"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">filebeat采集集群应用日志</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-04-26T03:00:00.000Z" title="发表于 2021-04-26 11:00:00">2021-04-26</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/filebeat/">filebeat</a></span></div><div class="content">filebeat采集集群应用日志在集群内已经部署好ES和Kibana的情况下，并且版本都是6.6.2版本
+部署filebeat配置filebeat持久化磁盘目录位置为/var/lib/filebeat-data映射filebeat内部/usr/share/filebeat/data目录后续需要采集的日志文件放在集群节点的/var/lib/filebeat-data目录就可以被/usr/share/filebeat/data//.log匹配上进行采集
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="openLDAP服务搭建与使用"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">openLDAP服务搭建与使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-04-01T05:24:00.000Z" title="发表于 2021-04-01 13:24:00">2021-04-01</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/LDAP/">LDAP</a></span></div><div class="content">openLDAP服务搭建与使用LDAP介绍LDAPLDAP是一种基于轻量目录访问协议，全称是Lightweight Directory Access Protocol，是由一个为查询、浏览和搜索而优化的数据库构成，它成树状结构组织数据，类似文件目录一样。LDAP单点登录认证主要是改变原有的认证策略，使得需要的软件都通过LDAP服务器进行认证，在统一身份认证后，用户的所有信息都存储在AD Server中，终端用户在需要使用公司内部服务的时候，都需要通过AD服务器进行认证。
+整个LDAP登录流程由以下4个步骤组成：
+
+连接到LDAP服务器。
+绑定到LDAP服务器。
+在LDAP服务器上执行所需要的操作。
+释放LDAP服务器的连接。
+
+LDAP场景说明：企业内部需要认证的服务很多，员工需要记住很多的密码， 即使对这些服务进行相同的密码设置，也存在很大的安全隐患。比如我们公司，有jira、confulence、gitlab、北森等系统，
+使用场景是提高用户在同一个企业的多个站点（域名）之间的无缝浏览体验，例如企业内部可能有多个处理不同业务的系统（OA，邮箱，财务等），用户只要在一个系统上保持登录 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/03/28/kubernetes/keeplive-haproxy/" title="使用 Keepalived 和 HAproxy 创建高可用集群">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Keepalived 和 HAproxy 创建高可用集群"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/03/28/kubernetes/keeplive-haproxy/" title="使用 Keepalived 和 HAproxy 创建高可用集群">使用 Keepalived 和 HAproxy 创建高可用集群</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-28T08:00:00.000Z" title="发表于 2021-03-28 16:00:00">2021-03-28</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/Keepalived/">Keepalived</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/HAproxy/">HAproxy</a></span></div><div class="content">使用 Keepalived 和 HAproxy 创建高可用集群准备
+
+
+IP
+hostname
+操作系统
+配置
+
+
+
+30.0.1.157
+LB1
+centos7.6
+2C4G80G
+
+
+30.0.1.141
+LB2
+centos7.6
+2C4G80G
+
+
+30.0.1.220
+node1
+centos7.6
+2C4G80G
+
+
+安装yum install keepalived haproxy psmisc -y
+haproxy1234567891011121314151617181920212223242526272829303132333435# vi /etc/haproxy/haproxy.cfgglobal    log /dev/log  local0 warning    chroot      /var/lib/haproxy    pidfile     /var/run/haproxy.pid    maxconn     4000    user        haproxy    group       haproxy    daemon      stats  ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/03/27/kubernetes/KubeSphere-3-install/" title="kubesphere3.0部署">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="kubesphere3.0部署"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/03/27/kubernetes/KubeSphere-3-install/" title="kubesphere3.0部署">kubesphere3.0部署</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-27T14:00:00.000Z" title="发表于 2021-03-27 22:00:00">2021-03-27</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/kubesphere/">kubesphere</a></span></div><div class="content">kubesphere3.0部署集群机器配置
+
+
+IP
+hostname
+操作系统
+配置
+
+
+
+30.0.1.248
+k8s-master
+centos7.6
+8C8G100G
+
+
+30.0.1.185
+k8s-node1
+centos7.6
+8C8G100G
+
+
+30.0.1.200
+k8s-node2
+centos7.6
+8C8G100G
+
+
+k8s-node2 用于创建好集群后通过add node的形式添加到集群中
+环境搭建环境配置
+修改hostname(每台都需要)hostnamectl set-hostname k8s-master
+
+添加hosts文件(每台都需要)
+
+
+1234# vi /etc/hosts...30.0.1.248 k8s-master30.0.1.185 k8s-node1
+
+
+关闭防火墙(每台都需要)
+
+12systemctl stop firewalldsystemctl disable firewalld
+
+
+关闭Selinux(每台都需要)
+
+123# vi /etc/sysconfig/selinux...SELINUX=disabled
+
+
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/03/25/kubernetes/goland-live/" title="k8s中部署goland">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s中部署goland"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/03/25/kubernetes/goland-live/" title="k8s中部署goland">k8s中部署goland</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-25T07:30:00.000Z" title="发表于 2021-03-25 15:30:00">2021-03-25</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/goland/">goland</a></span></div><div class="content">k8s中部署goland在官方仓库提供全家桶的官方镜像现在只需要在服务器申请2C4G左右的资源就可以在网页上运行goland进行开发(只支持一个用户)并且支持在线安装插件(有网络的情况)
+部署kubernetes使用的local存储并且固定调度在local存储的节点上
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104## deploykind: DeploymentapiVersion: apps/v1metadata:  name: goland-web  namespace: tool  labels:    app: goland-webspec:  replicas: 1  selector:    matchLabels: ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/03/19/kubernetes/kubernetes-deploy-redis-cluster/" title="kubernetes 中部署redis集群">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="kubernetes 中部署redis集群"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/03/19/kubernetes/kubernetes-deploy-redis-cluster/" title="kubernetes 中部署redis集群">kubernetes 中部署redis集群</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-19T08:40:09.000Z" title="发表于 2021-03-19 16:40:09">2021-03-19</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/yapi/">yapi</a></span></div><div class="content">kubernetes 中部署redis集群reids 集群简介Redis Cluster 是一组 Redis 实例，旨在通过对数据库进行分区来扩展数据库，从而使其更具弹性。群集中的每个成员（无论是主副本还是辅助副本）都管理哈希槽的子集。如果主机无法访问，则其从机将升级为主机。在由三个主节点组成的最小 Redis 群集中，每个主节点都有一个从节点（以实现最小的故障转移），每个主节点都分配有一个介于 0 到 16,383 之间的哈希槽范围。节点 A 包含从 0 到 5000 的哈希槽，节点 B 从 5001 到 10000，节点 C 从 10001 到 16383。群集内部的通信是通过内部总线进行的，使用协议传播有关群集的信息或发现新节点。
+部署 redis 集群建立应用由yaml文件创建redis的应用和服务
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2021/03/17/kubernetes/gitlab-deploy/" title="gitlab部署文档">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitlab部署文档"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/03/17/kubernetes/gitlab-deploy/" title="gitlab部署文档">gitlab部署文档</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-17T03:00:00.000Z" title="发表于 2021-03-17 11:00:00">2021-03-17</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/gitlab/">gitlab</a></span></div><div class="content">gitlab部署文档应用版本
+
+gitlab:sameersbn/gitlab:13.9.3
+postgresql:sameersbn/postgresql:12-20200524
+redis:redis:5.0.9
+
+使用docker-compose部署提前在机器上安装好docker和docker-compose编写 docker-compose.yaml文件
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210310410510610710810911011111211311411511611711811912012112212312412512612712812913013113213313413513613713813914014114 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2021/03/11/kubernetes/container-network/" title="测试容器中的网络">     <img class="post_bg" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="测试容器中的网络"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/03/11/kubernetes/container-network/" title="测试容器中的网络">测试容器中的网络</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-11T08:26:15.000Z" title="发表于 2021-03-11 16:26:15">2021-03-11</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/kubernetes/">kubernetes</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/kubernetes/">kubernetes</a><span class="article-meta__link">•</span><a class="article-meta__tags" href="/tags/network/">network</a></span></div><div class="content">测试容器中的网络容器中的网络延时部署NetPerf服务wget http://repo.iotti.biz/CentOS/7/x86_64/netperf-2.7.0-1.el7.lux.x86_64.rpmrpm -ivh netperf-2.7.0-1.el7.lux.x86_64.rpm启动服务netserver
+测试主机的网络情况netperf -t TCP_STREAM -H 10.221.2.191 -t TCP_RR
+123456789101112131415161718192021222324252627[root@node4 tools]# netperf -t TCP_STREAM -H 10.221.2.191 -t TCP_RRMIGRATED TCP REQUEST/RESPONSE TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 10.221.2.191 () port 0 AF_INET : first burst 0Local /RemoteSocket Size   Request  Resp.   Elap ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#content-inner">10</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/k8s.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">mutoulazy</div><div class="author-info__description">往者不谏，来者可追</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">98</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mutoulazy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mutoulazy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mutoulazy@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gitea与drone CICD"/></a><div class="content"><a class="title" href="/2021/04/30/kubernetes/gitea+drone/" title="gitea与drone CICD">gitea与drone CICD</a><time datetime="2021-04-30T03:00:00.000Z" title="发表于 2021-04-30 11:00:00">2021-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="filebeat采集集群应用日志"/></a><div class="content"><a class="title" href="/2021/04/26/kubernetes/filebeat-log/" title="filebeat采集集群应用日志">filebeat采集集群应用日志</a><time datetime="2021-04-26T03:00:00.000Z" title="发表于 2021-04-26 11:00:00">2021-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用"><img src="https://cdn.jsdelivr.net/gh/jerryc127/CDN/img/tag-bg.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="openLDAP服务搭建与使用"/></a><div class="content"><a class="title" href="/2021/04/01/kubernetes/openLDAP/" title="openLDAP服务搭建与使用">openLDAP服务搭建与使用</a><time datetime="2021-04-01T05:24:00.000Z" title="发表于 2021-04-01 13:24:00">2021-04-01</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/algorithm/"><span class="card-category-list-name">algorithm</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/cloud/"><span class="card-category-list-name">cloud</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/docker/"><span class="card-category-list-name">docker</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/go/"><span class="card-category-list-name">go</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/java/"><span class="card-category-list-name">java</span><span class="card-category-list-count">15</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/kubernetes/"><span class="card-category-list-name">kubernetes</span><span class="card-category-list-count">58</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/kubernetes/CICD/"><span class="card-category-list-name">CICD</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/kubernetes/CSI/"><span class="card-category-list-name">CSI</span><span class="card-category-list-count">1</span></a></li></ul></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/CSI/" style="font-size: 1.1em; color: #999">CSI</a> <a href="/tags/Cgroups/" style="font-size: 1.1em; color: #999">Cgroups</a> <a href="/tags/Downward-API/" style="font-size: 1.1em; color: #999">Downward API</a> <a href="/tags/HAproxy/" style="font-size: 1.1em; color: #999">HAproxy</a> <a href="/tags/Keepalived/" style="font-size: 1.1em; color: #999">Keepalived</a> <a href="/tags/Kube-proxy/" style="font-size: 1.1em; color: #999">Kube-proxy</a> <a href="/tags/Kubelet/" style="font-size: 1.1em; color: #999">Kubelet</a> <a href="/tags/LDAP/" style="font-size: 1.1em; color: #999">LDAP</a> <a href="/tags/NoSql/" style="font-size: 1.1em; color: #999">NoSql</a> <a href="/tags/Scheduler/" style="font-size: 1.23em; color: #999ea6">Scheduler</a> <a href="/tags/Systemd/" style="font-size: 1.1em; color: #999">Systemd</a> <a href="/tags/VS-Code/" style="font-size: 1.1em; color: #999">VS Code</a> <a href="/tags/algorithm/" style="font-size: 1.1em; color: #999">algorithm</a> <a href="/tags/api-server/" style="font-size: 1.1em; color: #999">api-server</a> <a href="/tags/ceph/" style="font-size: 1.37em; color: #99a4b2">ceph</a> <a href="/tags/cgroups/" style="font-size: 1.1em; color: #999">cgroups</a> <a href="/tags/cloud/" style="font-size: 1.1em; color: #999">cloud</a> <a href="/tags/cmd/" style="font-size: 1.1em; color: #999">cmd</a> <a href="/tags/collect/" style="font-size: 1.1em; color: #999">collect</a> <a href="/tags/collection/" style="font-size: 1.1em; color: #999">collection</a> <a href="/tags/configmap/" style="font-size: 1.1em; color: #999">configmap</a> <a href="/tags/controller-manager/" style="font-size: 1.1em; color: #999">controller manager</a> <a href="/tags/cpu/" style="font-size: 1.1em; color: #999">cpu</a> <a href="/tags/cri/" style="font-size: 1.1em; color: #999">cri</a> <a href="/tags/docker/" style="font-size: 1.37em; color: #99a4b2">docker</a> <a href="/tags/drone/" style="font-size: 1.1em; color: #999">drone</a> <a href="/tags/dubbo/" style="font-size: 1.1em; color: #999">dubbo</a> <a href="/tags/filebeat/" style="font-size: 1.1em; color: #999">filebeat</a> <a href="/tags/framework/" style="font-size: 1.23em; color: #999ea6">framework</a> <a href="/tags/gc/" style="font-size: 1.1em; color: #999">gc</a> <a href="/tags/git/" style="font-size: 1.1em; color: #999">git</a> <a href="/tags/gitea/" style="font-size: 1.1em; color: #999">gitea</a> <a href="/tags/gitlab/" style="font-size: 1.1em; color: #999">gitlab</a> <a href="/tags/go/" style="font-size: 1.37em; color: #99a4b2">go</a> <a href="/tags/goland/" style="font-size: 1.1em; color: #999">goland</a> <a href="/tags/harbor/" style="font-size: 1.23em; color: #999ea6">harbor</a> <a href="/tags/helm/" style="font-size: 1.1em; color: #999">helm</a> <a href="/tags/hpa/" style="font-size: 1.1em; color: #999">hpa</a> <a href="/tags/idea/" style="font-size: 1.1em; color: #999">idea</a> <a href="/tags/java/" style="font-size: 1.5em; color: #99a9bf">java</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/04/"><span class="card-archive-list-date">四月 2021</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/03/"><span class="card-archive-list-date">三月 2021</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/01/"><span class="card-archive-list-date">一月 2021</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/11/"><span class="card-archive-list-date">十一月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/09/"><span class="card-archive-list-date">九月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/07/"><span class="card-archive-list-date">七月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/06/"><span class="card-archive-list-date">六月 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/05/"><span class="card-archive-list-date">五月 2020</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">98</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2018-06-21T16:00:00.000Z"></div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2021-07-29T03:54:47.107Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By mutoulazy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://mutoulazy.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>function subtitleType () {
+  getScript('https://sdk.jinrishici.com/v2/browser/jinrishici.js').then(() => {
+    jinrishici.load(function (result) {
+      if (true) {
+        var sub = "悟已往之不谏&#44;知来者之可追".length == 0 ? new Array() : "悟已往之不谏&#44;知来者之可追".split(',')
+        var content = result.data.content
+        var both = sub.unshift(content)
+        var typed = new Typed('#subtitle', {
+          strings: sub,
+          startDelay: 300,
+          typeSpeed: 150,
+          loop: true,
+          backSpeed: 50,
+        })
+      } else {
+        document.getElementById('subtitle').innerHTML = result.data.content
+      }
+    })
+  })
+}
+
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}
+</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
